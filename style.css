@@ -14,22 +14,7 @@ License URI: license.txt
 /* =Start From Here
 -------------------------------------------------------------- */
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*The last 29 days of the month are the hardest."- Nikola Tesla*/
+#logo img {
+max-width: 960px;
+width: 100%;
+}
