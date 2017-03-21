@@ -1,4 +1,7 @@
 <?php
+
+include_once  __DIR__.'/compress.php';
+
 add_action( 'init', 'create_post_type' );
 function create_post_type() {
     register_post_type( 'beer',
@@ -48,3 +51,28 @@ function setPostViews($postID) {
 }
 // Remove issues with prefetching adding extra views
 remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
+
+
+
+
+
+
+
+
+
+// This code alwayse be the last in function.php file.
+/**
+ * Modify final html output before sending to the browser for rendering process.
+ * @param $buffer
+ * @return mixed
+ */
+function callback($buffer) {
+    $buffer = getCompressedOutPut($buffer);
+    // modify buffer here, and then return the updated code
+    return $buffer;
+}
+
+function buffer_start() { ob_start("callback"); }
+function buffer_end() { ob_end_flush(); }
+add_action('wp_loaded', 'buffer_start');
+add_action('shutdown', 'buffer_end');
