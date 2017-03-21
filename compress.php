@@ -45,9 +45,9 @@ function getCompressedOutPut($buffer)
 
 //     $buffer = preg_replace(array_keys($replace), array_values($replace), $buffer);
     $buffer = preg_replace(array_keys($additionaly), array_values($additionaly), $buffer);
-    $buffer = compress($buffer);
-//    ini_set("pcre.recursion_limit", "16777");
+    ini_set("pcre.recursion_limit", "16777");
 //    ini_set('zlib.output_compression', 'On'); // If you like to enable GZip, too!
+    $buffer = compress($buffer);
     return $buffer;
 }
 function compress($buffer)
