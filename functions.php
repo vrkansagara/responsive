@@ -68,11 +68,20 @@ remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
  */
 function callback($buffer) {
     $buffer = getCompressedOutPut($buffer);
+//    $buffer = compress($buffer);
     // modify buffer here, and then return the updated code
     return $buffer;
 }
 
-function buffer_start() { ob_start("callback"); }
-function buffer_end() { ob_end_flush(); }
-add_action('wp_loaded', 'buffer_start');
-add_action('shutdown', 'buffer_end');
+
+
+add_action('template_redirect', 'foo_buffer_go', 0);
+function foo_buffer_go(){
+    ob_start('callback');
+}
+
+add_action('shutdown', 'foo_buffer_stop', 1000);
+function foo_buffer_stop(){
+    ob_end_flush();
+}
+
