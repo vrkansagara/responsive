@@ -51,37 +51,3 @@ function setPostViews($postID) {
 }
 // Remove issues with prefetching adding extra views
 remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
-
-
-
-
-
-
-
-
-
-// This code alwayse be the last in function.php file.
-/**
- * Modify final html output before sending to the browser for rendering process.
- * @param $buffer
- * @return mixed
- */
-function callback($buffer) {
-    $buffer = getCompressedOutPut($buffer);
-//    $buffer = compress($buffer);
-    // modify buffer here, and then return the updated code
-    return $buffer;
-}
-
-
-
-add_action('template_redirect', 'foo_buffer_go', 0);
-function foo_buffer_go(){
-    ob_start('callback');
-}
-
-add_action('shutdown', 'foo_buffer_stop', 1000);
-function foo_buffer_stop(){
-    ob_end_flush();
-}
-
