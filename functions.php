@@ -55,33 +55,27 @@ remove_action( 'wp_head', 'adjacent_posts_rel_link_wp_head', 10, 0);
 
 
 
+function disable_wp_emojicons() {
 
+  // all actions related to emojis
+  remove_action( 'admin_print_styles', 'print_emoji_styles' );
+  remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+  remove_action( 'admin_print_scripts', 'print_emoji_detection_script' );
+  remove_action( 'wp_print_styles', 'print_emoji_styles' );
+  remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
+  remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+  remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
 
-
-
-
-// This code alwayse be the last in function.php file.
-/**
- * Modify final html output before sending to the browser for rendering process.
- * @param $buffer
- * @return mixed
- */
-function callback($buffer) {
-    $buffer = getCompressedOutPut($buffer);
-//    $buffer = compress($buffer);
-    // modify buffer here, and then return the updated code
-    return $buffer;
+  // filter to remove TinyMCE emojis
+  add_filter( 'tiny_mce_plugins', 'disable_emojicons_tinymce' );
 }
+add_action( 'init', 'disable_wp_emojicons' );
 
 
-
-add_action('template_redirect', 'foo_buffer_go', 0);
-function foo_buffer_go(){
-    ob_start('callback');
+function disable_emojicons_tinymce( $plugins ) {
+  if ( is_array( $plugins ) ) {
+    return array_diff( $plugins, array( 'wpemoji' ) );
+  } else {
+    return array();
+  }
 }
-
-add_action('shutdown', 'foo_buffer_stop', 1000);
-function foo_buffer_stop(){
-    ob_end_flush();
-}
-
